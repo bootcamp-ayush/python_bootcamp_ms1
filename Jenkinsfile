@@ -36,7 +36,7 @@ pipeline {
             stage('Coverage') {
                 steps {
                     sh '''
-                    python -m pytest tests/unittests --cov=. --cov-config=pipelines/conf/.coveragerc --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
+                    python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
                     echo "**********************************************************"
                     cat ./coverage-reports/coverage.xml
                     echo "**********************************************************"
