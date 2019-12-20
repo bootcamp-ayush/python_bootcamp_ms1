@@ -15,10 +15,9 @@ pipeline {
             /* BRANCH =  sh(script: 'echo ${BRANCH_NAME}', , returnStdout: true).trim()*/
 
         }
-        agent none
+        agent { docker 'python:3.8.0-alpine3.10' }
         stages {
             stage('Install Requirements') {
-                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                        sh '''
                         pip install -r requirements.txt
@@ -27,7 +26,6 @@ pipeline {
                 }
 
             stage('Unit tests') {
-                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                     sh '''
                     python -m pytest tests/unittests -s --junitxml='pyTests.xml' --alluredir='allure-results'
@@ -41,7 +39,6 @@ pipeline {
             }
 
             stage('Coverage') {
-                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                     sh '''
                     python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
