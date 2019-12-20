@@ -51,7 +51,7 @@ pipeline {
             }
             */
             stage('Sonar') {
-                agent { docker 'sonar-scanner-cli:4.2' }
+                agent { docker 'sonarsource/sonar-scanner-cli:4.2' }
                 steps {
                     sh '''
                     printenv
