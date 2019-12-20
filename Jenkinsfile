@@ -15,21 +15,17 @@ pipeline {
             /* BRANCH =  sh(script: 'echo ${BRANCH_NAME}', , returnStdout: true).trim()*/
 
         }
-        agent { docker 'python:3.8.0-alpine3.10' }
+        agent none
         stages {
             stage('Install Requirements') {
+                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                        sh '''
                         pip install -r requirements.txt
+                        python -m pytest tests/unittests -s --junitxml='pyTests.xml' --alluredir='allure-results'
+                        python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
                        '''
                     }
-                }
-
-            stage('Unit tests') {
-                steps {
-                    sh '''
-                    python -m pytest tests/unittests -s --junitxml='pyTests.xml' --alluredir='allure-results'
-                    '''
                 }
                 post {
                     always {
@@ -38,17 +34,23 @@ pipeline {
                 }
             }
 
-            stage('Coverage') {
+            /*
+            stage('Unit tests') {
                 steps {
                     sh '''
-                    python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
-                    echo "**********************************************************"
-                    cat ./coverage-reports/coverage.xml
-                    echo "**********************************************************"
+                    python -m pytest tests/unittests -s --junitxml='pyTests.xml' --alluredir='allure-results'
                     '''
                 }
             }
 
+            stage('Coverage') {
+                steps {
+                    sh '''
+                    python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
+                    '''
+                }
+            }
+            */
             stage('Sonar') {
                 agent { docker 'sonar-scanner-cli:4.2' }
                 steps {
