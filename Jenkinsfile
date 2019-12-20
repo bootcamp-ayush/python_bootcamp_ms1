@@ -17,7 +17,7 @@ pipeline {
         }
         agent none
         stages {
-            stage('Install Requirements') {
+            stage('Install Requirements and Run Tests') {
                 agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                        sh '''
@@ -51,7 +51,7 @@ pipeline {
             }
             */
             stage('Sonar') {
-                agent { docker 'sonarsource/sonar-scanner-cli:4.2' }
+                agent { docker 'bootcamp/toolshed/sonar-scanner' }
                 steps {
                     sh '''
                     printenv
