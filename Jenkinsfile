@@ -10,14 +10,15 @@ pipeline {
             NAMESPACE = 'python_bootcamp'
             DOCKER_REGISTRY_URL = ""
             DOCKER_REGISTRY = ''
-            /*REGISTRY_ACCESS = credentials('sps-harbour-user')*/
+            SONAR_TOKEN = credentials('sonarqube')
             RELEASE_NAME = 'python_bootcamp_ms1'
             BRANCH =  sh(script: 'echo $BRANCH_NAME', , returnStdout: true).trim()
 
         }
-        agent { docker 'python:3.8.0-alpine3.10' }
+        agent None
         stages {
             stage('Install Requirements') {
+                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                        sh '''
                         pip install -r requirements.txt
@@ -26,20 +27,46 @@ pipeline {
                 }
 
             stage('Unit tests') {
+                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                     sh '''
                     python -m pytest tests/unittests -s --junitxml='pyTests.xml' --alluredir='allure-results'
                     '''
                 }
+                post {
+                    always {
+                        junit 'pyTests.xml'
+                    }
+                }
             }
 
             stage('Coverage') {
+                agent { docker 'python:3.8.0-alpine3.10' }
                 steps {
                     sh '''
                     python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
                     echo "**********************************************************"
                     cat ./coverage-reports/coverage.xml
                     echo "**********************************************************"
+                    '''
+                }
+            }
+
+            stage('Sonar') {
+                agent { docker 'sonar-scanner-cli:4.2' }
+                steps {
+                    sh '''
+                    printenv
+                    sonar-scanner -X \
+                            -Dsonar.projectKey=bootcamp.python_bootcamp_ms1 \
+                            -Dsonar.projectName=python_bootcamp_ms1 \
+                            -Dsonar.host.url=https://localhost:9000 \
+                            -Dsonar.sources=. \
+                            -Dsonar.tests=tests/unittests \
+                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.python.coverage.reportPaths=coverage-reports/coverage.xml \
+                            -Dsonar.python.xunit.reportPath=pyTests.xml \
+                            -Dsonar.projectVersion=${env.BUILD_TAG}
                     '''
                 }
             }
