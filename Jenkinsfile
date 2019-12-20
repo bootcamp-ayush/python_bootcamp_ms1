@@ -26,7 +26,6 @@ pipeline {
                         python -m pytest tests/unittests --cov=.  --cov-report xml:coverage-reports/coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
                        '''
                     }
-                }
                 post {
                     always {
                         junit 'pyTests.xml'
