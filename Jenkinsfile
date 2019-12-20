@@ -15,7 +15,7 @@ pipeline {
             BRANCH =  sh(script: 'echo $BRANCH_NAME', , returnStdout: true).trim()
 
         }
-        agent None
+        agent none
         stages {
             stage('Install Requirements') {
                 agent { docker 'python:3.8.0-alpine3.10' }
