@@ -12,7 +12,7 @@ pipeline {
             DOCKER_REGISTRY = ''
             SONAR_TOKEN = credentials('sonarqube')
             RELEASE_NAME = 'python_bootcamp_ms1'
-            BRANCH =  sh(script: 'echo $BRANCH_NAME', , returnStdout: true).trim()
+            /* BRANCH =  sh(script: 'echo ${BRANCH_NAME}', , returnStdout: true).trim()*/
 
         }
         agent none
