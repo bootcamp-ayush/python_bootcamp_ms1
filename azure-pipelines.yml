@@ -24,6 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip freeze
+          python3 -m pytest --junitxml=pyTests.xml
         displayName:  'Install dependencies'
       - script: |
           pip freeze
@@ -39,7 +40,8 @@ jobs:
         displayName: 'Docker build'
         inputs:
           command: build
-          tags: bootcamp_ms1:latest
+          tags: |
+           - bootcamp_ms1:latest
       - script: |
           docker image ls
         displayName: 'list docker images'
