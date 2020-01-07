@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootcamp-ms1-deployment
+  labels:
+    app: bootcamp-ms1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootcamp-ms1
+  template:
+    metadata:
+      labels:
+        app: bootcamp-ms1
+    spec:
+      containers:
+      - name: bootcamp-ms1
+        image: gcr.io/bootcamp-263313/bootcamp_ms1:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080

@@ -54,11 +54,10 @@ pipeline {
                 agent { docker 'bootcamp/toolshed/sonar-scanner' }
                 steps {
                     sh '''
-                    printenv
                     sonar-scanner -X \
                             -Dsonar.projectKey=bootcamp.python_bootcamp_ms1 \
                             -Dsonar.projectName=python_bootcamp_ms1 \
-                            -Dsonar.host.url=https://localhost:9000 \
+                            -Dsonar.host.url=http://docker.for.mac.localhost:9000 \
                             -Dsonar.sources=. \
                             -Dsonar.tests=tests/unittests \
                             -Dsonar.login=${SONAR_TOKEN} \
