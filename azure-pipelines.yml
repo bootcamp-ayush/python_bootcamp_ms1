@@ -5,14 +5,18 @@
 
 trigger:
 - master
+resources:
+  containers:
+  - container: python
+    image: python:latest
+    options: '-u 0'
 
 jobs:
   - job: 'InstallAndUnitTests'
     displayName: 'Install Requirements and run Unit tests'
     pool:
       vmImage: 'ubuntu-latest'
-    container: python:latest
-
+    container: python
     steps:
       - script: |
           python -m pip install --upgrade pip
@@ -33,6 +37,6 @@ jobs:
           command: build
           tags: bootcamp_ms1:latest
       - script: |
-          docker images ls
+          docker image ls
         displayName: 'list docker images'
 
