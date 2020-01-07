@@ -27,7 +27,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      - tasks: Docker@2
+      - task: Docker@2
         displayName: 'Docker build'
         inputs:
           command: build
