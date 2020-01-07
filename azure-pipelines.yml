@@ -6,31 +6,33 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python27:
-      python.version: '2.7'
-    Python35:
-      python.version: '3.5'
-    Python36:
-      python.version: '3.6'
-    Python37:
-      python.version: '3.7'
+jobs:
+  - job: Install Requirements and Unit Test
+    displayName: 'Install Requirements and run Unit tests'
+    pool:
+      vmImage: 'ubuntu-latest'
+    container: python:latest
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+    steps:
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName:  'Install dependencies'
+      - script: |
+          python -m pytest --junitxml=pyTests.xml
+        displayName:  'Run unit tests'
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  - job : Build Image and Push
+    displayName: 'Build Image and Push'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - tasks: Docker@2
+        displayName: 'Docker build'
+        inputs:
+          command: build
+          tags: bootcamp_ms1:latest
+      - script: |
+          docker images ls
+        displayName: 'list docker images'
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
