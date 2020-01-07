@@ -7,7 +7,7 @@ trigger:
 - master
 
 jobs:
-  - job: Install Requirements and Unit Test
+  - job: 'InstallAndUnitTests'
     displayName: 'Install Requirements and run Unit tests'
     pool:
       vmImage: 'ubuntu-latest'
@@ -22,7 +22,7 @@ jobs:
           python -m pytest --junitxml=pyTests.xml
         displayName:  'Run unit tests'
 
-  - job : Build Image and Push
+  - job : 'BuildAndPush'
     displayName: 'Build Image and Push'
     pool:
       vmImage: 'ubuntu-latest'
