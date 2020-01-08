@@ -45,10 +45,10 @@ jobs:
         displayName: 'build and push image'
         inputs:
           command: buildAndPush
-          repository: bootcampp.azurecr.io
+          repository: bootcampp.azurecr.io/bootcamp_ms1
           containerRegistry: bootcampACR
           tags: |
-           - bootcamp_ms1:latest
+            latest
       - script: |
           docker image ls
         displayName: 'list docker images'
