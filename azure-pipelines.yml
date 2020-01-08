@@ -26,12 +26,12 @@ jobs:
         displayName:  'Install dependencies'
       - script: |
           source ./env/bin/activate
-          python -m pytest  --junitxml=Tests_Result.xml --cov=. --cov-report xml:coverage-reports/Tests_coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
+          python -m pytest  --junitxml=Tests_Result.xml --cov=. --cov-report xml:Tests_coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
         displayName:  'Run unit tests'
       - task: PublishTestResults@2
         displayName: 'publish test reports'
         inputs:
-          testResultsFiles: '**/Tests*.xml'
+          testResultsFiles: 'Tests*.xml'
           testRunTitle: 'Publish test run result and coverage'
 
 
