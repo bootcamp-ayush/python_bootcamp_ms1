@@ -24,9 +24,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip freeze
+          ls -ltrh
+          echo $VIRTUAL_ENV
           python3 -m pytest --junitxml=pyTests.xml
         displayName:  'Install dependencies'
       - script: |
+          ls -ltrh
+          echo $VIRTUAL_ENV
           pip freeze
           python3 -m pytest --junitxml=pyTests.xml
         displayName:  'Run unit tests'
