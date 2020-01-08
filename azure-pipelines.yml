@@ -37,7 +37,7 @@ jobs:
 
   - job : 'Phase2'
     displayName: 'Build and Push Image'
-    dependsOn: 'Phase1'
+    # dependsOn: 'Phase1'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
