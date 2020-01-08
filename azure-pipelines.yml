@@ -37,7 +37,7 @@ jobs:
 
   - job : 'Phase2'
     displayName: 'Build and Push Image'
-    dependsOn: 'InstallAndTest'
+    dependsOn: 'Phase1'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -46,6 +46,7 @@ jobs:
         inputs:
           command: buildAndPush
           repository: bootcampp.azurecr.io
+          containerRegistry: bootcampACR
           tags: |
            - bootcamp_ms1:latest
       - script: |
