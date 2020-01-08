@@ -25,6 +25,7 @@ jobs:
           pip install -r requirements.txt
         displayName:  'Install dependencies'
       - script: |
+          source ./env/bin/activate
           pip install pytest pytest-cov
           python -m pytest  --junitxml=Tests_Result.xml --cov=. --cov-report xml:coverage-reports/Tests_coverage.xml --cov-report html:coverage-reports --cov-report annotate:coverage-reports --cov-report term-missing
         displayName:  'Run unit tests'
